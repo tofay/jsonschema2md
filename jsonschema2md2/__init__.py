@@ -19,7 +19,7 @@ from typing import Dict, Optional, Sequence
 import click
 import yaml
 
-__version__ = version('jsonschema2md')
+__version__ = version('jsonschema2md2')
 
 
 class Parser:
@@ -192,7 +192,7 @@ class Parser:
         output_lines.append(
             f"{indentation}- {name_formatted}{obj_type}{description_line}\n"
         )
-        
+
         # Recursively parse subschemas following schema composition keywords
         schema_composition_keyword_map = {
             "allOf": "All of", "anyOf": "Any of", "oneOf": "One of"
