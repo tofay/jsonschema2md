@@ -1,13 +1,17 @@
-name: Test Python package
+name: Continuous integration
 
 on:
-- push
-- pull_request
-
+  push:
+    branches:
+      - master
+      - '[0-9]+.[0-9]+'
+    tags:
+      - '*'
+  pull_request:
 
 jobs:
-  test_platforms:
-    runs-on: ubuntu-20.04
+  main:
+    runs-on: ubuntu-22.04
     timeout-minutes: 15
     if: "!startsWith(github.event.head_commit.message, '[skip ci] ')"
 
@@ -15,26 +19,60 @@ jobs:
       fail-fast: false
       matrix:
         python-version:
+          - '3.7'
           - '3.8'
           - '3.9'
-          - '3.10'
 
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
 
-    - name: Setup Poetry
-      uses: abatilo/actions-poetry@v2.0.0
-    - name: Install with Poetry
-      run: poetry install
-    - name: Lint with flake8
-      run: |
-        # stop the build if there are Python syntax errors or undefined names
-        poetry run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        poetry run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with pytest
-      run: |
-        poetry run pytest tests -vv
+      - run: echo "${HOME}/.local/bin" >> ${GITHUB_PATH}
+      - run: python3 -m pip install --user --requirement=ci/requirements.txt
+        if: matrix.python-version != '3.7'
+      - run: pip install poetry
+        if: matrix.python-version == '3.7'
+
+      - uses: actions/cache@v3
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}
+          restore-keys: "pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}\npre-commit-"
+      - run: pre-commit run --all-files
+        env:
+          SKIP: poetry-lock
+        if: matrix.python-version != '3.7'
+      - run: git diff && false
+        if: failure()
+
+      - name: Checks
+        run: c2cciutils-checks
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        if: matrix.python-version != '3.7'
+
+      - name: Install with Poetry
+        run: poetry install
+
+      - name: Prospector
+        run: |
+          poetry run prospector --output-format=pylint --die-on-tool-error
+
+      - name: Test with pytest
+        run: |
+          poetry run pytest tests -vv
+
+      - name: Init pypi
+        run: |
+          echo "[pypi]" > ~/.pypirc
+          echo "username = ${{ secrets.PYPI_USERNAME }}" >> ~/.pypirc
+          echo "password = ${{ secrets.PYPI_PASSWORD }}" >> ~/.pypirc
+          python3 -m pip install --user wheel twine
+        if: env.HAS_SECRETS == 'HAS_SECRETS'
+      - name: Publish
+        run: c2cciutils-publish
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        if: env.HAS_SECRETS == 'HAS_SECRETS' && matrix.python-version == '3.10'
