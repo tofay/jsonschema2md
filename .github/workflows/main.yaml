@@ -35,11 +35,14 @@ jobs:
       - run: pip install poetry
         if: matrix.python-version == '3.7'
 
+      - run: pip install --editable=.
+        if: matrix.python-version != '3.7'
       - uses: actions/cache@v3
         with:
           path: ~/.cache/pre-commit
           key: pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}
           restore-keys: "pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}\npre-commit-"
+        if: matrix.python-version != '3.7'
       - run: pre-commit run --all-files
         env:
           SKIP: poetry-lock
