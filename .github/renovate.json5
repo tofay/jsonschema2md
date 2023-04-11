@@ -1,7 +1,7 @@
 {
   extends: ['config:base'],
   timezone: 'Europe/Zurich',
-  schedule: 'on the first day of the month',
+  schedule: 'after 5pm on the first day of the month',
   labels: ['dependencies'],
   separateMajorMinor: true,
   separateMinorPatch: true,
@@ -10,8 +10,9 @@
   lockFileMaintenance: {
     enabled: true,
     automerge: true,
-    schedule: 'on the first day of the month',
+    schedule: 'after 5pm on the first day of the month',
   },
+  baseBranches: ['0.5', '0.6', '0.7'],
   regexManagers: [
     {
       fileMatch: ['^ci/dpkg-versions.yaml$'],
