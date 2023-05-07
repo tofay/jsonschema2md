@@ -94,9 +94,9 @@ You can use the pre-commit hook with:
 ```yaml
 repos:
   - repo: https://github.com/sbrunner/jsonschema2md2
+    rev: <version> # Use the ref you want to point at
     hooks:
       - id: jsonschema2md
-        rev: <version> # Use the ref you want to point at
         files: schema.json
         args:
           - --pre-commit
