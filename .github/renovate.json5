@@ -62,7 +62,7 @@
     },
     /** Accept only the patch on the stabilization branches */
     {
-      matchBaseBranches: ['/2\\..*/'],
+      matchBaseBranches: ['/[0-9]\\..*/'],
       matchUpdateTypes: ['major', 'minor', 'pin', 'digest', 'lockFileMaintenance', 'rollback', 'bump'],
       enabled: false,
     },
