@@ -60,6 +60,12 @@
       groupName: 'all minor versions',
       automerge: true,
     },
+    /** Accept only the patch on the stabilization branches */
+    {
+      matchBaseBranches: ['/2\\..*/'],
+      matchUpdateTypes: ['major', 'minor', 'pin', 'digest', 'lockFileMaintenance', 'rollback', 'bump'],
+      enabled: false,
+    },
     /** Group Poetry packages */
     {
       matchPackageNames: ['poetry', 'poetry-.*'],
