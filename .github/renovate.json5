@@ -68,7 +68,7 @@
     },
     /** Group Poetry packages */
     {
-      matchPackageNames: ['poetry', 'poetry-.*'],
+      matchPackageNames: ['pip', 'poetry', 'poetry-.*', 'poetry-dynamic-versioning', 'poetry-plugin-export'],
       groupName: 'Poetry',
       automerge: true,
       separateMajorMinor: false,
