@@ -1,3 +1,5 @@
+profiles:
+  - duplicated
 strictness: veryhigh
 max-line-length: 110
 
@@ -16,7 +18,7 @@ mypy:
   run: true
   options:
     python-version: 3.8
-    ignore-missing-imports: True
+    ignore-missing-imports: true
     warn:
       - redundant-casts
       - unused-ignores
