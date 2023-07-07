@@ -1,11 +1,10 @@
 # jsonschema2md
 
-[![](https://flat.badgen.net/pypi/v/jsonschema2md?icon=pypi)](https://pypi.org/project/jsonschema2md)
-[![](https://flat.badgen.net/github/release/ralfg/jsonschema2md)](https://github.com/ralfg/jsonschema2md/releases)
-[![](https://flat.badgen.net/github/checks/ralfg/jsonschema2md/)](https://github.com/ralfg/jsonschema2md/actions)
-[![](https://flat.badgen.net/codecov/c/github/ralfg/jsonschema2md)](https://codecov.io/gh/RalfG/jsonschema2md)
-![](https://flat.badgen.net/github/last-commit/ralfg/jsonschema2md)
-![](https://flat.badgen.net/github/license/ralfg/jsonschema2md)
+[![](https://flat.badgen.net/pypi/v/jsonschema2md2?icon=pypi)](https://pypi.org/project/jsonschema2md2)
+[![](https://flat.badgen.net/github/release/sbrunner/jsonschema2md2)](https://github.com/sbrunner/jsonschema2md2/releases)
+[![](https://flat.badgen.net/github/checks/sbrunner/jsonschema2md2/)](https://github.com/sbrunner/jsonschema2md2/actions)
+![](https://flat.badgen.net/github/last-commit/sbrunner/jsonschema2md2)
+![](https://flat.badgen.net/github/license/sbrunner/jsonschema2md2)
 
 _Convert JSON Schemas to simple, human-readable Markdown documentation._
 
@@ -44,7 +43,7 @@ will be converted to:
 > - **`firstName`** _(string)_: The person's first name.
 > - **`lastName`** _(string)_: The person's last name.
 
-See the [examples](https://github.com/RalfG/jsonschema2md/tree/master/examples)
+See the [examples](https://github.com/sbrunner/jsonschema2md2/tree/master/examples)
 directory for more elaborate examples.
 
 ---
@@ -54,7 +53,7 @@ directory for more elaborate examples.
 Install with pip
 
 ```sh
-pip install jsonschema2md
+pip install jsonschema2md2
 ```
 
 ## Usage
@@ -69,9 +68,9 @@ jsonschema2md [OPTIONS] <input.json> <output.md>
 
 ```python
 import json
-import jsonschema2md
+import jsonschema2md2
 
-parser = jsonschema2md.Parser(
+parser = jsonschema2md2.Parser(
     examples_as_yaml=False,
     show_examples="all",
 )
@@ -82,9 +81,9 @@ print(''.join(md_lines))
 
 ### Options
 
-- `examples_as_yaml`: Parse examples in YAML-format instead of JSON. (`bool`, default:
+- `examples-as-yaml`: Parse examples in YAML-format instead of JSON. (`bool`, default:
   `False`)
-- `show_examples`: Parse examples for only the main object, only properties, or all.
+- `show-examples`: Parse examples for only the main object, only properties, or all.
   (`str`, default `all`, options: `object`, `properties`, `all`)
 
 ## pre-commit hook
@@ -121,4 +120,4 @@ pre-commit install --allow-missing-config
 
 ## Changelog
 
-See [Changelog.md](https://github.com/RalfG/jsonschema2md/blob/master/CHANGELOG.md).
+See [Changelog.md](https://github.com/sbrunner/jsonschema2md2/blob/master/CHANGELOG.md).
