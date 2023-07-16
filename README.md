@@ -1,10 +1,10 @@
 # jsonschema2md
 
-[![](https://flat.badgen.net/pypi/v/jsonschema2md2?icon=pypi)](https://pypi.org/project/jsonschema2md2)
-[![](https://flat.badgen.net/github/release/sbrunner/jsonschema2md2)](https://github.com/sbrunner/jsonschema2md2/releases)
-[![](https://flat.badgen.net/github/checks/sbrunner/jsonschema2md2/)](https://github.com/sbrunner/jsonschema2md2/actions)
-![](https://flat.badgen.net/github/last-commit/sbrunner/jsonschema2md2)
-![](https://flat.badgen.net/github/license/sbrunner/jsonschema2md2)
+[![](https://flat.badgen.net/pypi/v/jsonschema2md?icon=pypi)](https://pypi.org/project/jsonschema2md)
+[![](https://flat.badgen.net/github/release/sbrunner/jsonschema2md)](https://github.com/sbrunner/jsonschema2md/releases)
+[![](https://flat.badgen.net/github/checks/sbrunner/jsonschema2md/)](https://github.com/sbrunner/jsonschema2md/actions)
+![](https://flat.badgen.net/github/last-commit/sbrunner/jsonschema2md)
+![](https://flat.badgen.net/github/license/sbrunner/jsonschema2md)
 
 _Convert JSON Schemas to simple, human-readable Markdown documentation._
 
@@ -43,7 +43,7 @@ will be converted to:
 > - **`firstName`** _(string)_: The person's first name.
 > - **`lastName`** _(string)_: The person's last name.
 
-See the [examples](https://github.com/sbrunner/jsonschema2md2/tree/master/examples)
+See the [examples](https://github.com/sbrunner/jsonschema2md/tree/master/examples)
 directory for more elaborate examples.
 
 ---
@@ -53,7 +53,7 @@ directory for more elaborate examples.
 Install with pip
 
 ```sh
-pip install jsonschema2md2
+pip install jsonschema2md
 ```
 
 ## Usage
@@ -68,9 +68,9 @@ jsonschema2md [OPTIONS] <input.json> <output.md>
 
 ```python
 import json
-import jsonschema2md2
+import jsonschema2md
 
-parser = jsonschema2md2.Parser(
+parser = jsonschema2md.Parser(
     examples_as_yaml=False,
     show_examples="all",
 )
@@ -92,7 +92,7 @@ You can use the pre-commit hook with:
 
 ```yaml
 repos:
-  - repo: https://github.com/sbrunner/jsonschema2md2
+  - repo: https://github.com/sbrunner/jsonschema2md
     rev: <version> # Use the ref you want to point at
     hooks:
       - id: jsonschema2md
@@ -106,9 +106,9 @@ repos:
 ## Contributing
 
 Bugs, questions or suggestions? Feel free to post an issue in the
-[issue tracker](https://github.com/sbrunner/jsonschema2md2/issues/) or to make a pull
+[issue tracker](https://github.com/sbrunner/jsonschema2md/issues/) or to make a pull
 request! See
-[Contributing.md](https://github.com/sbrunner/jsonschema2md2/blob/master/CONTRIBUTING.md)
+[Contributing.md](https://github.com/sbrunner/jsonschema2md/blob/master/CONTRIBUTING.md)
 for more info.
 
 Install the pre-commit hooks:
@@ -120,4 +120,4 @@ pre-commit install --allow-missing-config
 
 ## Changelog
 
-See [Changelog.md](https://github.com/sbrunner/jsonschema2md2/blob/master/CHANGELOG.md).
+See [Changelog.md](https://github.com/sbrunner/jsonschema2md/blob/master/CHANGELOG.md).

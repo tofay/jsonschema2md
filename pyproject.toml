@@ -6,14 +6,14 @@ target-version = ['py37']
 profile = "black"
 
 [tool.poetry]
-name = "jsonschema2md2"
+name = "jsonschema2md"
 version = "0.0.0"
 description = "Convert JSON Schema to human-readable Markdown documentation"
 authors = ["Ralf Gabriels <ralfg@hotmail.be>", "Matt Graham <matthew.m.graham@gmail.com>"]
 maintainers = ["Stéphane Brunner <stephane.brunner@gmail.com>"]
 license = "Apache-2.0"
 readme = "README.md"
-repository = "https://github.com/sbrunner/jsonschema2md2"
+repository = "https://github.com/sbrunner/jsonschema2md"
 keywords = ["JSON Schema", "Markdown", "Converter", "Parser", "Documentation"]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -26,7 +26,7 @@ classifiers = [
 ]
 
 [tool.poetry.scripts]
-jsonschema2md = 'jsonschema2md2:main'
+jsonschema2md = 'jsonschema2md:main'
 
 [tool.poetry.dependencies]
 python = "^3.7.2"

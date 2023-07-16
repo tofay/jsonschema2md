@@ -21,7 +21,7 @@ from typing import Dict, List, Optional, Sequence, Union
 
 import yaml
 
-__version__ = version("jsonschema2md2")
+__version__ = version("jsonschema2md")
 
 
 class Parser:

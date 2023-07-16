@@ -1,7 +1,7 @@
-"""Test jsonschema2md2."""
+"""Test jsonschema2md."""
 
 
-import jsonschema2md2
+import jsonschema2md
 
 
 class TestParser:
@@ -171,7 +171,7 @@ class TestParser:
             },
         ]
 
-        parser = jsonschema2md2.Parser()
+        parser = jsonschema2md.Parser()
 
         for case in test_cases:
             observed_output = " ".join(
@@ -180,12 +180,12 @@ class TestParser:
             assert case["expected_output"] == observed_output
 
     def test_parse_object(self):
-        parser = jsonschema2md2.Parser()
+        parser = jsonschema2md.Parser()
         expected_output = ["- **`fruits`** *(array)*\n", "  - **Items** *(string)*\n"]
         assert expected_output == parser._parse_object(self.test_schema["properties"]["fruits"], "fruits")
 
     def test_parse_schema(self):
-        parser = jsonschema2md2.Parser()
+        parser = jsonschema2md.Parser()
         expected_output = [
             "# JSON Schema\n\n",
             "*Vegetable preferences*\n\n",
@@ -220,7 +220,7 @@ class TestParser:
         assert expected_output == parser.parse_schema(self.test_schema)
 
     def test_parse_schema_examples_yaml(self):
-        parser = jsonschema2md2.Parser(examples_as_yaml=True)
+        parser = jsonschema2md.Parser(examples_as_yaml=True)
         expected_output = [
             "# JSON Schema\n\n",
             "*Vegetable preferences*\n\n",
@@ -242,7 +242,7 @@ class TestParser:
         assert expected_output == parser.parse_schema(self.test_schema)
 
     def test_parse_top_level_pattern_properties(self):
-        parser = jsonschema2md2.Parser()
+        parser = jsonschema2md.Parser()
 
         test_schema = {
             "$id": "https://example.com/arrays.schema.json",
@@ -268,7 +268,7 @@ class TestParser:
         assert expected_output == parser.parse_schema(test_schema)
 
     def test_parse_top_level_items(self):
-        parser = jsonschema2md2.Parser()
+        parser = jsonschema2md.Parser()
 
         test_schema = {
             "$id": "https://example.com/arrays.schema.json",
@@ -301,7 +301,7 @@ class TestParser:
         assert expected_output == parser.parse_schema(test_schema)
 
     def test_schema_composition_keywords(self):
-        parser = jsonschema2md2.Parser()
+        parser = jsonschema2md.Parser()
         test_schema = {
             "$id": "https://example.com/arrays.schema.json",
             "$schema": "http://json-schema.org/draft-07/schema#",
