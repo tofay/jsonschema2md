@@ -83,3 +83,15 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
         if: env.HAS_SECRETS == 'HAS_SECRETS' && matrix.python-version == '3.9'
+      - run: |
+          sed --in-place 's/jsonschema2md/jsonschema2md2/g' pyproject.toml
+          sed --in-place 's@sbrunner/jsonschema2md2@sbrunner/jsonschema2md@g' pyproject.toml
+          sed --in-place 's/jsonschema2md/jsonschema2md2/g' jsonschema2md/__init__.py
+          git diff
+          mv jsonschema2md jsonschema2md2
+      - name: Publish
+        run: c2cciutils-publish
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        if: env.HAS_SECRETS == 'HAS_SECRETS' && matrix.python-version == '3.9'
