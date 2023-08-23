@@ -17,7 +17,8 @@ import json
 import re
 import subprocess  # nosec
 import sys
-from typing import Dict, List, Optional, Sequence, Union
+from collections.abc import Sequence
+from typing import Optional, Union
 
 import yaml
 
@@ -62,7 +63,7 @@ class Parser:
                 f"`{valid_show_examples_options}`; `{show_examples}` was passed."
             )
 
-    def _construct_description_line(self, obj: Dict, add_type: bool = False) -> Sequence[str]:
+    def _construct_description_line(self, obj: dict, add_type: bool = False) -> Sequence[str]:
         """Construct description line of property, definition, or item."""
         description_line = []
 
@@ -109,7 +110,7 @@ class Parser:
 
         return description_line
 
-    def _construct_examples(self, obj: Dict, indent_level: int = 0, add_header: bool = True) -> Sequence[str]:
+    def _construct_examples(self, obj: dict, indent_level: int = 0, add_header: bool = True) -> Sequence[str]:
         def dump_json_with_line_head(obj, line_head, **kwargs):
             result = [line_head + line for line in io.StringIO(json.dumps(obj, **kwargs)).readlines()]
             return "".join(result)
@@ -138,12 +139,12 @@ class Parser:
 
     def _parse_object(
         self,
-        obj: Union[Dict, List],
+        obj: Union[dict, list],
         name: Optional[str],
         name_monospace: bool = True,
-        output_lines: Optional[List[str]] = None,
+        output_lines: Optional[list[str]] = None,
         indent_level: int = 0,
-        path: Optional[List[str]] = None,
+        path: Optional[list[str]] = None,
         required: bool = False,
     ) -> Sequence[str]:
         """Parse JSON object and its items, definitions, and properties recursively."""
@@ -248,7 +249,7 @@ class Parser:
 
         return output_lines
 
-    def parse_schema(self, schema_object: Dict) -> Sequence[str]:
+    def parse_schema(self, schema_object: dict) -> Sequence[str]:
         """Parse JSON Schema object to markdown text."""
         output_lines = []
 
