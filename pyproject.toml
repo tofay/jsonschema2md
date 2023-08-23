@@ -1,6 +1,6 @@
 [tool.black]
 line-length = 110
-target-version = ['py37']
+target-version = ['py39']
 
 [tool.isort]
 profile = "black"
@@ -29,7 +29,7 @@ classifiers = [
 jsonschema2md = 'jsonschema2md:main'
 
 [tool.poetry.dependencies]
-python = "^3.7.2"
+python = ">=3.9,<4.0"
 PyYAML = "6.0.1"
 
 [tool.poetry.group.dev.dependencies]
