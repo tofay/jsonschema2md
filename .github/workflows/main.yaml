@@ -54,10 +54,8 @@ jobs:
       - run: git diff && false
         if: failure()
 
-      - name: Checks
-        run: c2cciutils-checks
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Print environment information
+        run: c2cciutils-env
         if: matrix.python-version != '3.7'
 
       - name: Install with Poetry
