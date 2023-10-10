@@ -4,7 +4,6 @@
 
 | Version | Supported Until |
 | ------- | --------------- |
-| 0.5     | Unsupported     |
-| 0.6     | Best effort     |
+| <=0.6   | Unsupported     |
 | 0.7     | Best effort     |
 | 0.8     | Best effort     |
