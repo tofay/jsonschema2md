@@ -63,7 +63,12 @@ class Parser:
                 f"`{valid_show_examples_options}`; `{show_examples}` was passed."
             )
 
-    def _construct_description_line(self, obj: dict, add_type: bool = False) -> Sequence[str]:
+    def _construct_description_line(
+        self,
+        obj: dict,
+        add_type: bool = False,
+        schema_path: Optional[str] = None,
+    ) -> Sequence[str]:
         """Construct description line of property, definition, or item."""
         description_line = []
 
@@ -100,7 +105,10 @@ class Parser:
             else:
                 description_line.append("Cannot contain additional properties.")
         if "$ref" in obj:
-            description_line.append(f"Refer to *[{obj['$ref']}](#{obj['$ref'][2:]})*.")
+            ref_obj = resolve_ref(obj["$ref"], schema_path)
+            description_line.extend(
+                self._construct_description_line(ref_obj, add_type, schema_path=schema_path)
+            )
         if "default" in obj:
             description_line.append(f"Default: `{json.dumps(obj['default'])}`.")
 
@@ -146,6 +154,7 @@ class Parser:
         indent_level: int = 0,
         path: Optional[list[str]] = None,
         required: bool = False,
+        schema_path: Optional[str] = None,
     ) -> Sequence[str]:
         """Parse JSON object and its items, definitions, and properties recursively."""
 
@@ -165,6 +174,7 @@ class Parser:
                     name_monospace=False,
                     output_lines=output_lines,
                     indent_level=indent_level + 2,
+                    schema_path=schema_path,
                 )
             return output_lines
 
@@ -172,7 +182,7 @@ class Parser:
             raise TypeError(f"Non-object type found in properties list: `{name}: {obj}`.")
 
         # Construct full description line
-        description_line_base = self._construct_description_line(obj)
+        description_line_base = self._construct_description_line(obj, schema_path=schema_path)
         description_line = list(
             map(
                 lambda line: line.replace("\n\n", "<br>" + indentation_items),
@@ -250,7 +260,11 @@ class Parser:
 
         return output_lines
 
-    def parse_schema(self, schema_object: dict) -> Sequence[str]:
+    def parse_schema(
+        self,
+        schema_object: dict,
+        schema_path: Optional[str] = None,
+    ) -> Sequence[str]:
         """Parse JSON Schema object to markdown text."""
         output_lines = []
 
@@ -260,12 +274,16 @@ class Parser:
         else:
             output_lines.append("# JSON Schema\n\n")
         if "description" in schema_object:
-            output_lines.append(f"*{schema_object['description']}*\n\n")
+            output_lines.append(f"{schema_object['description']}\n\n")
 
         # Add items
         if "items" in schema_object:
             output_lines.append("## Items\n\n")
-            output_lines.extend(self._parse_object(schema_object["items"], "Items", name_monospace=False))
+            output_lines.extend(
+                self._parse_object(
+                    schema_object["items"], "Items", name_monospace=False, schema_path=schema_path
+                )
+            )
 
         # Add additional properties
         if "additionalProperties" in schema_object and isinstance(
@@ -277,6 +295,7 @@ class Parser:
                     schema_object["additionalProperties"],
                     "Additional Properties",
                     name_monospace=False,
+                    schema_path=schema_path,
                 )
             )
 
@@ -284,7 +303,7 @@ class Parser:
         if "patternProperties" in schema_object:
             output_lines.append("## Pattern Properties\n\n")
             for obj_name, obj in schema_object["patternProperties"].items():
-                output_lines.extend(self._parse_object(obj, obj_name))
+                output_lines.extend(self._parse_object(obj, obj_name, schema_path=schema_path))
 
         # Add properties and definitions
         for name in ["properties", "definitions"]:
@@ -292,7 +311,7 @@ class Parser:
                 output_lines.append(f"## {name.capitalize()}\n\n")
                 for obj_name, obj in schema_object[name].items():
                     path = [name, obj_name] if name == "definitions" else []
-                    output_lines.extend(self._parse_object(obj, obj_name, path=path))
+                    output_lines.extend(self._parse_object(obj, obj_name, path=path, schema_path=schema_path))
 
         # Add examples
         if "examples" in schema_object and self.show_examples in ["all", "object"]:
@@ -300,6 +319,22 @@ class Parser:
             output_lines.extend(self._construct_examples(schema_object, indent_level=0, add_header=False))
 
         return output_lines
+
+
+def resolve_ref(ref: str, schema_path: str) -> Optional[dict]:
+    parts = ref.split("#")
+    from pathlib import Path
+
+    ref_schema_path = str(Path(schema_path).parent.joinpath(parts[0]))
+    with open(ref_schema_path, encoding="utf-8") as input_json:
+        ref_obj = json.load(input_json)
+    if len(parts) > 1:
+        for part in parts[1].lstrip("/").split("/"):
+            ref_obj = ref_obj[part]
+    if "$ref" in ref_obj:
+        return resolve_ref(ref_obj["$ref"], ref_schema_path)
+    else:
+        return ref_obj
 
 
 def main():
@@ -330,7 +365,7 @@ def main():
 
     parser = Parser(examples_as_yaml=args.examples_as_yaml, show_examples=args.show_examples)
     with open(args.input_json, encoding="utf-8") as input_json:
-        output_md = parser.parse_schema(json.load(input_json))
+        output_md = parser.parse_schema(json.load(input_json), args.input_json)
 
     with open(args.output_markdown, "w", encoding="utf-8") as output_markdown:
         output_markdown.writelines(output_md)
